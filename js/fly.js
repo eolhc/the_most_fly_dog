@@ -12,18 +12,6 @@ var scene,
 		camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
 		renderer, container;
 
-function start() {
-  buildScene();
-  buildLights();
-
-  buildDog();
-  buildWallStreet();
-  buildSky();
-  // // start a loop that will update the objects' positions
-	// // and render the scene on each frame
-  loop();
-}
-
 //this is for the aspect ratio of the camera and size of rendered
 function buildScene() {
   HEIGHT = window.innerHeight;
@@ -83,7 +71,7 @@ var hemisphereLight, shadowLight;
 
 function buildLights() {
   hemisphereLight = new THREE.HemisphereLight(0xaaaaaa,0x000000, .9)
-
+	ambientLight = new THREE.AmbientLight(0xdc8874, .5);
   shadowLight = new THREE.DirectionalLight(0xFFFFFF, .9);
   shadowLight.position.set(150, 350, 350);
   shadowLight.castShadow = true;
@@ -99,47 +87,16 @@ function buildLights() {
 
   scene.add(hemisphereLight);
   scene.add(shadowLight);
+	scene.add(ambientLight);
   console.log('lights are on')
 }
 
 //build wall-street
-var wallStreet = function() {
 
-  // create the geometry (shape) of the cylinder;
-  // the parameters are:
-  // radius top, radius bottom, height, number of segments on the radius, number of segments vertically
-  //
-  // var mat;
-  // var geom;
-  //
-  // var loader = new THREE.TextureLoader();
-  // loader.load(
-  //   'textures/brickwall.jpg',
-  //   function(texture) {
-  //     // var geom = new THREE.CylinderBufferGeometry(600,600,800,40,10);
-  //     geom = new THREE.BoxBufferGeometry( 200, 200, 200 );
-  //     geom.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
-  //     mat = new THREE.MeshBasicMaterial({
-  //       map: texture
-  //     });
-  //     // console.log(mat)
-  //
-  //   }
-  // );
-  // console.log(geom)
-  // this.mesh = new THREE.Mesh(geom, mat);
-  // this.mesh.receiveShadow = true;
+var loader = new THREE.TextureLoader();
 
-}
-
-var wallStreet;
-
-function buildWallStreet(){
-
-	// push it a little bit at the bottom of the scene
-	// wallStreet.mesh.position.y = -10;
-  // instantiate a loader
-  var loader = new THREE.TextureLoader();
+var WallStreet = function() {
+	var that = this;
 
   // load a resource
   loader.load(
@@ -154,61 +111,29 @@ function buildWallStreet(){
         opacity: .8,
         shading: THREE.FlatShading
   		 } );
-       var geometry = new THREE.CylinderGeometry(120,120,180,16,4);
-       geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
-       var mesh = new THREE.Mesh( geometry, material );
-       mesh.position.y = -50;
-       scene.add( mesh );
-       renderer.render(scene, camera)
-  	}
-  );
-
-
-	// add the mesh of the sea to the scene
-  console.log(wallStreet)
-	// scene.add(wallStreet.mesh);
+    	var geometry = new THREE.CylinderGeometry(120,120,180,16,4);
+			geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
+			that.mesh = new THREE.Mesh( geometry, material );
+			that.mesh.position.y = -50
+		});
+		console.log(that)
 }
 
-//
-// Cloud = function() {
-//   this.mesh = new THREE.Object3D();
-//
-//   var loader = new THREE.TextureLoader();
-//   var that = this;
-// 	var material;
-// 	var geom;
-//
-//   loader.load(
-//     '../textures/cloud.png',
-//     function(texture) {
-//       var geom = new THREE.BoxBufferGeometry(20,20,20);
-//       var material = new THREE.MeshBasicMaterial( {
-//         color: Colors.grey,
-//       });
-// 			var nBlocs = 3+Math.floor(Math.random()*3);
-// 			for (var i=0; i<nBlocs; i++ ) {
-// 				// create the mesh by cloning the geometry
-// 				var m = new THREE.Mesh(geom, material);
-// 				// set the position and the rotation of each cube randomly
-// 				m.position.x = i*15;
-// 				m.position.y = Math.random()*10;
-// 				m.position.z = Math.random()*10;
-// 				m.rotation.z = Math.random()*Math.PI*2;
-// 				m.rotation.y = Math.random()*Math.PI*2;
-//
-// 				// set the size of the cube randomly
-// 				var s = .1 + Math.random()*.9;
-// 				m.scale.set(s,s,s);
-//
-// 				// allow each cube to cast and to receive shadows
-// 				m.castShadow = true;
-// 				m.receiveShadow = true;
-//
-// 				// add the cube to the container we first created
-// 				that.mesh.add(m);
-//   	}
-// 	});
-// }
+
+
+var wallStreet;
+
+function buildWallStreet() {
+ //
+	wallStreet = new WallStreet();
+	// console.log(wallStreet)
+
+	 console.log(wallStreet.mesh)
+
+	setTimeout(function(){
+		scene.add(wallStreet.mesh)}, 2000);
+ // renderer.render(scene, camera)
+}
 
 
 Cloud = function(){
@@ -305,7 +230,6 @@ function buildSky(){
 }
 
 
-
 var Dog = function() {
   this.mesh = new THREE.Object3D();
 
@@ -361,7 +285,7 @@ var Dog = function() {
 	var nose = new THREE.Mesh(geomNose, matNose);
 	nose.position.x = 70;
 	nose.position.y = 1;
-	nose.position.z = 20;
+	nose.position.z = 0;
 	nose.receiveShadow = true;
 	this.mesh.add(nose);
 
@@ -377,15 +301,15 @@ var Dog = function() {
 
 	var geomRightEar = new THREE.BoxGeometry(20,30,10,1,1,1);
 	var matRightEar = new THREE.MeshPhongMaterial({color:Colors.black, shading:THREE.FlatShading});
-	var rightEar = new THREE.Mesh(geomRightEar, matRightEar);
-	rightEar.position.x = 20;
-	rightEar.position.y = 10;
-	rightEar.position.z = 20;
-	rightEar.castShadow = true;
-	rightEar.receiveShadow = true;
-	this.mesh.add(rightEar);
+	this.rightEar = new THREE.Mesh(geomRightEar, matRightEar);
+	this.rightEar.position.x = 20;
+	this.rightEar.position.y = 10;
+	this.rightEar.position.z = 20;
+	this.rightEar.castShadow = true;
+	this.rightEar.receiveShadow = true;
+	this.mesh.add(this.rightEar);
 
-	var geomTail = new THREE.BoxGeometry(10,5,5,1,1,1);
+	var geomTail = new THREE.BoxGeometry(20,5,5,1,1,1);
 	var matTail = new THREE.MeshPhongMaterial({color:Colors.black, shading:THREE.FlatShading});
 	this.tail = new THREE.Mesh(geomTail, matTail);
 	this.tail.position.x = -30;
@@ -407,13 +331,77 @@ function buildDog() {
 }
 
 function loop() {
-	dog.tail.rotation.x += 0.3;
+
 	wallStreet.mesh.rotation.z += .005;
 	sky.mesh.rotation.z += .01;
 
+	updateDogPos();
+
   renderer.render(scene, camera);
-  console.log("where is my bloody wallstreet")
+  // console.log("where is my bloody wallstreet")
 	requestAnimationFrame(loop);
 }
 
 window.addEventListener('load', start, false);
+
+
+var mousePos = {
+	x : 0,
+	y : 0
+};
+
+function handleMouseMove(event) {
+	// here we are converting the mouse position value received
+	// to a normalized value varying between -1 and 1;
+	// this is the formula for the horizontal axis:
+
+	var tx = -1 + (event.clientX / WIDTH)*2;
+
+	// for the vertical axis, we need to inverse the formula
+	// because the 2D y-axis goes the opposite direction of the 3D y-axis
+
+	var ty = 1 - (event.clientY / HEIGHT)*2;
+	mousePos = {x:tx, y:ty};
+};
+
+function updateDogPos() {
+	// let's move the airplane between -100 and 100 on the horizontal axis,
+	// and between 25 and 175 on the vertical axis,
+	// depending on the mouse position which ranges between -1 and 1 on both axes;
+	// to achieve that we use a normalize function (see below)
+
+	var targetX = normalize(mousePos.x, -.75, .75, -100, 100);
+	var targetY = normalize(mousePos.y, -.75, .75, 25, 175);
+	dog.mesh.position.y += (targetY-dog.mesh.position.y)*0.1;
+
+
+	// update the airplane's position
+	dog.mesh.position.y = targetY;
+	dog.mesh.position.x = targetX;
+	dog.tail.rotation.x += 0.3;
+	dog.rightEar.rotation.y += 0.5;
+
+}
+
+function normalize(v,vmin,vmax,tmin, tmax){
+
+	var nv = Math.max(Math.min(v,vmax), vmin);
+	var dv = vmax-vmin;
+	var pc = (nv-vmin)/dv;
+	var dt = tmax-tmin;
+	var tv = tmin + (pc*dt);
+	return tv;
+
+}
+
+function start() {
+	buildScene();
+	buildLights();
+	buildWallStreet();
+	buildSky();
+	buildDog();
+	// // start a loop that will update the objects' positions
+	// // and render the scene on each frame
+	$(document).on("mousemove",handleMouseMove)
+	setTimeout(function(){loop()},2000);
+}
