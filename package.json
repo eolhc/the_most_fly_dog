@@ -1,0 +1,15 @@
+{
+  "name": "the_most_fly_dog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "cannon": "github:schteppe/cannon.js"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "eolhc",
+  "license": "ISC"
+}

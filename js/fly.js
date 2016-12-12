@@ -111,7 +111,7 @@ var WallStreet = function() {
         opacity: .8,
         shading: THREE.FlatShading
   		 } );
-    	var geometry = new THREE.CylinderGeometry(120,120,180,16,4);
+    	var geometry = new THREE.CylinderGeometry(120,120,150,16,4);
 			geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
 			that.mesh = new THREE.Mesh( geometry, material );
 			that.mesh.position.y = -50
@@ -309,12 +309,12 @@ var Dog = function() {
 	this.rightEar.receiveShadow = true;
 	this.mesh.add(this.rightEar);
 
-	var geomTail = new THREE.BoxGeometry(20,5,5,1,1,1);
+	var geomTail = new THREE.BoxGeometry(15,5,5,1,1,1);
 	var matTail = new THREE.MeshPhongMaterial({color:Colors.black, shading:THREE.FlatShading});
 	this.tail = new THREE.Mesh(geomTail, matTail);
-	this.tail.position.x = -30;
-	this.tail.position.y = 10;
-	this.tail.position.z = 30;
+	this.tail.position.x = -35;
+	this.tail.position.y = 5;
+	this.tail.position.z = 0;
 	this.tail.receiveShadow = true;
 	this.mesh.add(this.tail);
 
