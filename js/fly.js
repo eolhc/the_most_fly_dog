@@ -93,9 +93,10 @@ function buildLights() {
 
 //build wall-street
 
-var loader = new THREE.TextureLoader();
 
 var WallStreet = function() {
+	var loader = new THREE.TextureLoader();
+
 	var that = this;
 
   // load a resource
@@ -119,8 +120,6 @@ var WallStreet = function() {
 		console.log(that)
 }
 
-
-
 var wallStreet;
 
 function buildWallStreet() {
@@ -133,6 +132,33 @@ function buildWallStreet() {
 	setTimeout(function(){
 		scene.add(wallStreet.mesh)}, 2000);
  // renderer.render(scene, camera)
+}
+
+
+Money = function() {
+	var loader = new THREE.TextureLoader();
+
+	var that = this;
+
+	// load a resource
+	loader.load(
+		// resource URL
+		'../textures/cash.jpeg',
+		// Function when resource is loaded
+		function ( texture ) {
+			// do something with the texture
+			var material = new THREE.MeshBasicMaterial( {
+				map: texture,
+				transparent: true,
+				opacity: .8,
+				shading: THREE.FlatShading
+			 } );
+			 var geometry = new THREE.BoxGeometry( 25, 10, 10 );
+			 geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
+			 that.mesh = new THREE.Mesh( geometry, material );
+			 that.mesh.position.y= 150;
+		});
+		console.log(that)
 }
 
 
@@ -175,9 +201,12 @@ Cloud = function(){
 	}
 }
 
+
 // Define a Sky Object
 Sky = function(){
 	// Create an empty container
+
+
 	this.mesh = new THREE.Object3D();
 
 	// choose a number of clouds to be scattered in the sky
@@ -227,6 +256,10 @@ function buildSky(){
 	sky = new Sky();
 	sky.mesh.position.y = -600;
 	scene.add(sky.mesh);
+	money = new Money();
+	setTimeout(function(){
+		scene.add(money.mesh)
+	},1000);
 }
 
 
@@ -334,6 +367,8 @@ function loop() {
 
 	wallStreet.mesh.rotation.z += .005;
 	sky.mesh.rotation.z += .01;
+	money.mesh.rotation.z += .005;
+
 
 	updateDogPos();
 
@@ -354,12 +389,9 @@ function handleMouseMove(event) {
 	// here we are converting the mouse position value received
 	// to a normalized value varying between -1 and 1;
 	// this is the formula for the horizontal axis:
-
 	var tx = -1 + (event.clientX / WIDTH)*2;
-
 	// for the vertical axis, we need to inverse the formula
 	// because the 2D y-axis goes the opposite direction of the 3D y-axis
-
 	var ty = 1 - (event.clientY / HEIGHT)*2;
 	mousePos = {x:tx, y:ty};
 };
@@ -369,7 +401,6 @@ function updateDogPos() {
 	// and between 25 and 175 on the vertical axis,
 	// depending on the mouse position which ranges between -1 and 1 on both axes;
 	// to achieve that we use a normalize function (see below)
-
 	var targetX = normalize(mousePos.x, -.75, .75, -100, 100);
 	var targetY = normalize(mousePos.y, -.75, .75, 25, 175);
 	dog.mesh.position.y += (targetY-dog.mesh.position.y)*0.1;
