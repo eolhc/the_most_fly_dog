@@ -489,11 +489,10 @@ function buildDog() {
 
 
 function loop() {
-
 	wallStreet.mesh.rotation.z += .005;
 	clouds.mesh.rotation.z += .005;
-	knives.mesh.rotation.z += .001;
-	moneyz.mesh.rotation.z += .001;
+	knives.mesh.rotation.z += .008;
+	moneyz.mesh.rotation.z += .008;
 
 	// money.mesh.rotation.z += .005;
 
@@ -552,17 +551,16 @@ function normalize(v,vmin,vmax,tmin, tmax){
 
 }
 
-var allTheMoneyDeeDoos;
-
 function checkGetMoney() {
 	// console.log(dog.mesh.position.x)
 	// console.log(dog.mesh.position.y)
 	//for each mesh
-	allTheMoneyDeeDoos = scene.children[4].children;
-	for (var i = 0; i < allTheMoneyDeeDoos.length; i++) {
+	for (var i = 0; i < scene.children[4].children.length; i++) {
+		obj = scene.children[4].children[i]
+		objNumber = obj.length
 		var position = new THREE.Vector3();
-		moneyX = position.setFromMatrixPosition(allTheMoneyDeeDoos[i].matrixWorld).x;
-		moneyY = position.setFromMatrixPosition(allTheMoneyDeeDoos[i].matrixWorld).y;
+		moneyX = position.setFromMatrixPosition(obj.matrixWorld).x;
+		moneyY = position.setFromMatrixPosition(obj.matrixWorld).y;
 
 
 		var mXRange = [moneyX-12, moneyX + 5];
@@ -573,26 +571,24 @@ function checkGetMoney() {
 
 		if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
 			&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
-			allTheMoneyDeeDoos.splice(allTheMoneyDeeDoos[i],1)
+			scene.children[4].remove(obj);
 			addMoney();
 		}
 	}
 }
 
-var allTheKnifeyDeeDoos;
 
 function checkGetStabbed() {
 	// console.log(dog.mesh.position.x)
 	// console.log(dog.mesh.position.y)
 	//for each mesh
 
-	var allTheKnifeyDeeDoos = scene.children[5].children;
 
-
-	for (var i = 0; i < allTheKnifeyDeeDoos.length; i++) {
+	for (var i = 0; i < scene.children[5].children.length; i++) {
+		obj = scene.children[5].children[i];
 		var position = new THREE.Vector3();
-		knifeX = position.setFromMatrixPosition(allTheKnifeyDeeDoos[i].matrixWorld).x;
-		knifeY = position.setFromMatrixPosition(allTheKnifeyDeeDoos[i].matrixWorld).y;
+		knifeX = position.setFromMatrixPosition(obj.matrixWorld).x;
+		knifeY = position.setFromMatrixPosition(obj.matrixWorld).y;
 
 		var mXRange = [knifeX-12, knifeX + 5];
 		var mYRange = [knifeY-5, knifeY + 5];
@@ -602,9 +598,8 @@ function checkGetStabbed() {
 
 		if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
 			&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
-			allTheKnifeyDeeDoos.splice(allTheKnifeyDeeDoos[i],1)
-
-			deductMoney();
+				scene.children[5].remove(obj);
+				deductMoney();
 		}
 	}
 }
