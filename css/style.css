@@ -1,7 +1,8 @@
 body {
   font-family: Futura, Futura-Medium, "Futura Medium", "Century Gothic", CenturyGothic, "Apple Gothic", AppleGothic, "URW Gothic L", "Avant Garde", sans-serif;
   padding: 0;
-  margin: 0; }
+  margin: 0;
+}
 
 header {
   position: fixed;
@@ -9,7 +10,8 @@ header {
   margin: 0 auto;
   z-index: 100;
   text-align: center;
-  padding: 2em; }
+  padding: 2em;
+}
 
 #cash {
   position: absolute;
@@ -18,35 +20,43 @@ header {
   text-align: center;
   z-index: 50;
   right: 0;
-  bottom: 0; }
+  bottom: 0;
+}
 
 #cash p {
-  display: inline-block; }
+  display: inline-block;
+}
 
 #cash img {
   width: 15%;
-  display: inline-block; }
+  display: inline-block;
+}
 
 #wall-street {
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: linear-gradient(#A5DCE5, #F1FFFA); }
+  background: linear-gradient(#A5DCE5, #F1FFFA);
+}
 
 #info {
   position: absolute;
   left: 0;
   bottom: 0;
   padding: 2em;
-  width: 30%; }
+  width: 30%;
+}
 
 #amount {
-  display: inline-block; }
+  display: inline-block;
+}
 
 h2 {
-  color: #ED6A5A; }
+  color: #ED6A5A;
+}
 
 p {
   color: #524136;
-  font-size: 0.8em; }
+  font-size: 0.8em;
+}
