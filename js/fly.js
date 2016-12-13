@@ -9,7 +9,9 @@ var Colors = {
 };
 
 var points = 0;
-var allObjects = [];
+var allMoneyz = [];
+var allKnives = [];
+
 
 var scene, camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
 		renderer, container;
@@ -149,10 +151,34 @@ Money = function() {
 			var material = new THREE.MeshBasicMaterial( {
 				map: texture,
 				transparent: true,
-				opacity: .8,
-				shading: THREE.FlatShading
+				opacity: .8
 			 } );
 			 var geometry = new THREE.BoxGeometry( 25, 10, 10 );
+			 geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
+			 that.mesh = new THREE.Mesh( geometry, material );
+			//  that.mesh.position.y= 50;
+		});
+		console.log(that)
+}
+
+Knife = function() {
+	var loader = new THREE.TextureLoader();
+
+	var that = this;
+
+	// load a resource
+	loader.load(
+		// resource URL
+		'../textures/knife.png',
+		// Function when resource is loaded
+		function ( texture ) {
+			// do something with the texture
+			var material = new THREE.MeshBasicMaterial( {
+				map: texture,
+				transparent: true,
+				opacity: .8
+			 } );
+			 var geometry = new THREE.BoxGeometry( 30, 0, 30 );
 			 geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
 			 that.mesh = new THREE.Mesh( geometry, material );
 			 that.mesh.position.y= 150;
@@ -247,18 +273,24 @@ Sky = function(){
 	}
 
 	// let's scatter some money in the sky
-	this.nMoneyz = 10;
+	// this.mesh = new THREE.Object3D();
+	this.nMoneyz = 20;
 
 	var that = this;
 
-	var stepMoneyAngle = Math.PI*2 / this.nMoneyz;
+	var stepMoneyAngle = Math.PI*2;
+
 
 	for (var i = 0; i < this.nMoneyz; i++) {
 		m = new Money();
 
-		setTimeout(function() {
-			a = stepMoneyAngle * i;
-			h = 550 + Math.random() * 200;
+		allMoneyz.push(m);
+	}
+
+	setTimeout(function() {
+		allMoneyz.forEach(function(m) {
+			a = stepMoneyAngle * Math.random(20);
+			h = 700 + Math.random() * 50;
 
 			m.mesh.position.y = Math.sin(a) * h;
 			m.mesh.position.x = Math.cos(a) * h;
@@ -266,15 +298,44 @@ Sky = function(){
 			m.mesh.rotation.z = a + Math.PI/2;
 			m.mesh.position.z = 0;
 
-			s = 1+Math.random() * 2;
+			s = 0.5+Math.random()*0.5;
 			m.mesh.scale.set(s,s,s);
 
 			that.mesh.add(m.mesh);
+		})
+	}, 1000)
 
-			allObjects.push("money"+i);
-		}, 1000)
 
+	this.nKnives = 20;
+
+	var that = this;
+
+	var stepKnifeAngle = Math.PI*2;
+
+
+	for (var i = 0; i < this.nKnives; i++) {
+		k = new Knife();
+
+		allKnives.push(k);
 	}
+
+	setTimeout(function() {
+		allKnives.forEach(function(k) {
+			a = stepKnifeAngle * Math.random(20);
+			h = 700 + Math.random() * 50;
+
+			k.mesh.position.y = Math.sin(a) * h;
+			k.mesh.position.x = Math.cos(a) * h;
+
+			k.mesh.rotation.z = a + Math.PI/2;
+			k.mesh.position.z = 0;
+
+			s = 0.5+Math.random()*0.5;
+			k.mesh.scale.set(s,s,s);
+
+			that.mesh.add(k.mesh);
+		})
+	}, 1000)
 }
 
 // Now we instantiate the sky and push its center a bit
@@ -290,7 +351,7 @@ function buildSky(){
 	// setTimeout(function(){
 	// 	scene.add(money.mesh)
 	// },1000);
-	// allObjects.push(money);
+	// allMoneyz.push(money);
 }
 
 
@@ -399,7 +460,7 @@ function buildDog() {
 function loop() {
 
 	wallStreet.mesh.rotation.z += .005;
-	sky.mesh.rotation.z += .01;
+	sky.mesh.rotation.z += .008;
 	// money.mesh.rotation.z += .005;
 
 
@@ -472,12 +533,12 @@ function checkCollision() {
 		&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
 		scene.remove(m.mesh)
 		updateScore();
-		allObjects.splice(0,1);
+		allMoneyz.splice(0,1);
 	}
 }
 
 function updateScore() {
-	if (allObjects.length == 1){
+	if (allMoneyz.length == 1){
 		points += 1;
 		$('#amount').text(points)
 	}
