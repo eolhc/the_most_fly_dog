@@ -8,6 +8,9 @@ var Colors = {
 	black: 0x000000
 };
 
+var points = 0;
+var allObjects = [];
+
 var scene,
 		camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
 		renderer, container;
@@ -49,8 +52,6 @@ function buildScene() {
   //adds the domElement of the rendered to wallstreet
   container.append(renderer.domElement);
   renderer.render(scene, camera);
-
-
   window.addEventListener('resize', handleWindowResize, false);
 
 }
@@ -260,6 +261,7 @@ function buildSky(){
 	setTimeout(function(){
 		scene.add(money.mesh)
 	},1000);
+	allObjects.push(money);
 }
 
 
@@ -361,13 +363,15 @@ function buildDog() {
 	dog.mesh.scale.set(.25,.25,.25);
 	dog.mesh.position.y = 100;
 	scene.add(dog.mesh)
+
 }
+
 
 function loop() {
 
 	wallStreet.mesh.rotation.z += .005;
 	sky.mesh.rotation.z += .01;
-	money.mesh.rotation.z += .005;
+	// money.mesh.rotation.z += .005;
 
 
 	updateDogPos();
@@ -376,8 +380,6 @@ function loop() {
   // console.log("where is my bloody wallstreet")
 	requestAnimationFrame(loop);
 }
-
-window.addEventListener('load', start, false);
 
 
 var mousePos = {
@@ -397,6 +399,8 @@ function handleMouseMove(event) {
 };
 
 function updateDogPos() {
+	checkCollision();
+
 	// let's move the airplane between -100 and 100 on the horizontal axis,
 	// and between 25 and 175 on the vertical axis,
 	// depending on the mouse position which ranges between -1 and 1 on both axes;
@@ -425,6 +429,31 @@ function normalize(v,vmin,vmax,tmin, tmax){
 
 }
 
+function checkCollision() {
+	// console.log(dog.mesh.position.x)
+	// console.log(dog.mesh.position.y)
+	//give a range to the dog
+	var moneyXRange = [money.mesh.position.x-12, money.mesh.position.x + 5];
+	var moneyYRange = [money.mesh.position.y-5, money.mesh.position.y + 5];
+
+	var dogXRange = [dog.mesh.position.x - 15, dog.mesh.position.x]
+	var dogYRange = [dog.mesh.position.y - 5, dog.mesh.position.y + 10]
+
+	if (dogXRange[1] >= moneyXRange[0] && dogXRange[0] <= moneyXRange[1]
+		&& dogYRange[1] >= moneyYRange[0] && dogYRange[0] <= moneyYRange[1]) {
+		scene.remove(money.mesh)
+		updateScore();
+		allObjects.splice(0,1);
+	}
+}
+
+function updateScore() {
+	if (allObjects.length == 1){
+		points += 1;
+		$('#amount').text(points)
+	}
+}
+
 function start() {
 	buildScene();
 	buildLights();
@@ -436,3 +465,5 @@ function start() {
 	$(document).on("mousemove",handleMouseMove)
 	setTimeout(function(){loop()},2000);
 }
+
+window.addEventListener('load', start, false);
