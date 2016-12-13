@@ -11,11 +11,9 @@ var Colors = {
 var points = 0;
 var allObjects = [];
 
-var scene,
-		camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
+var scene, camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
 		renderer, container;
 
-//this is for the aspect ratio of the camera and size of rendered
 function buildScene() {
   HEIGHT = window.innerHeight;
   WIDTH = window.innerWidth;
@@ -165,6 +163,7 @@ Money = function() {
 
 Cloud = function(){
 	// Create an empty container that will hold the different parts of the cloud
+	//CREATES A SINGLE CLOUD
 	this.mesh = new THREE.Object3D();
 
 	// create a cube geometry;
@@ -206,7 +205,7 @@ Cloud = function(){
 // Define a Sky Object
 Sky = function(){
 	// Create an empty container
-
+	// CREATES A WHOLE BUNCH OF CLOUDS
 
 	this.mesh = new THREE.Object3D();
 
@@ -215,16 +214,16 @@ Sky = function(){
 
 	// To distribute the clouds consistently,
 	// we need to place them according to a uniform angle
-	var stepAngle = Math.PI*2 / this.nClouds;
+	var stepCloudAngle = Math.PI*2 / this.nClouds;
 
 	// create the clouds
-	for(var i=0; i<this.nClouds; i++){
-		var c = new Cloud();
+	for (var i=0; i<this.nClouds; i++) {
+		c = new Cloud();
 
 		// set the rotation and the position of each cloud;
 		// for that we use a bit of trigonometry
-		var a = stepAngle*i; // this is the final angle of the cloud
-		var h = 750 + Math.random()*200; // this is the distance between the center of the axis and the cloud itself
+		a = stepCloudAngle*i; // this is the final angle of the cloud
+		h = 750 + Math.random()*200; // this is the distance between the center of the axis and the cloud itself
 
 		// Trigonometry!!! I hope you remember what you've learned in Math :)
 		// in case you don't:
@@ -240,11 +239,41 @@ Sky = function(){
 		c.mesh.position.z = -400-Math.random()*400;
 
 		// we also set a random scale for each cloud
-		var s = 1+Math.random()*2;
+		s = 1+Math.random()*2;
 		c.mesh.scale.set(s,s,s);
 
 		// do not forget to add the mesh of each cloud in the scene
 		this.mesh.add(c.mesh);
+	}
+
+	// let's scatter some money in the sky
+	this.nMoneyz = 10;
+
+	var that = this;
+
+	var stepMoneyAngle = Math.PI*2 / this.nMoneyz;
+
+	for (var i = 0; i < this.nMoneyz; i++) {
+		m = new Money();
+
+		setTimeout(function() {
+			a = stepMoneyAngle * i;
+			h = 550 + Math.random() * 200;
+
+			m.mesh.position.y = Math.sin(a) * h;
+			m.mesh.position.x = Math.cos(a) * h;
+
+			m.mesh.rotation.z = a + Math.PI/2;
+			m.mesh.position.z = 0;
+
+			s = 1+Math.random() * 2;
+			m.mesh.scale.set(s,s,s);
+
+			that.mesh.add(m.mesh);
+
+			allObjects.push("money"+i);
+		}, 1000)
+
 	}
 }
 
@@ -257,11 +286,11 @@ function buildSky(){
 	sky = new Sky();
 	sky.mesh.position.y = -600;
 	scene.add(sky.mesh);
-	money = new Money();
-	setTimeout(function(){
-		scene.add(money.mesh)
-	},1000);
-	allObjects.push(money);
+	// money = new Money();
+	// setTimeout(function(){
+	// 	scene.add(money.mesh)
+	// },1000);
+	// allObjects.push(money);
 }
 
 
@@ -433,15 +462,15 @@ function checkCollision() {
 	// console.log(dog.mesh.position.x)
 	// console.log(dog.mesh.position.y)
 	//give a range to the dog
-	var moneyXRange = [money.mesh.position.x-12, money.mesh.position.x + 5];
-	var moneyYRange = [money.mesh.position.y-5, money.mesh.position.y + 5];
+	var mXRange = [m.mesh.position.x-12, m.mesh.position.x + 5];
+	var mYRange = [m.mesh.position.y-5, m.mesh.position.y + 5];
 
 	var dogXRange = [dog.mesh.position.x - 15, dog.mesh.position.x]
 	var dogYRange = [dog.mesh.position.y - 5, dog.mesh.position.y + 10]
 
-	if (dogXRange[1] >= moneyXRange[0] && dogXRange[0] <= moneyXRange[1]
-		&& dogYRange[1] >= moneyYRange[0] && dogYRange[0] <= moneyYRange[1]) {
-		scene.remove(money.mesh)
+	if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
+		&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
+		scene.remove(m.mesh)
 		updateScore();
 		allObjects.splice(0,1);
 	}

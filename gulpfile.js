@@ -16,9 +16,13 @@ gulp.task('sass', function(){
     .pipe(gulp.dest('css'));
 });
 
-gulp.task('watch',function(){
+gulp.task('watchStyle',function(){
   gulp.watch(['style.scss'],['sass'])
+});
+
+gulp.task('watchJS',function(){
+  gulp.watch(['fly.js'])
 });
 //default is a special name
 //just type gulp to run it's like an initialize
-gulp.task('default',['server','watch'])
+gulp.task('default',['server','watchStyle','watchJS'])
