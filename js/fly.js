@@ -144,7 +144,7 @@ Money = function() {
 	// load a resource
 	loader.load(
 		// resource URL
-		'../textures/cash.jpeg',
+		'../textures/cash.png',
 		// Function when resource is loaded
 		function ( texture ) {
 			// do something with the texture
@@ -491,9 +491,9 @@ function buildDog() {
 function loop() {
 
 	wallStreet.mesh.rotation.z += .005;
-	clouds.mesh.rotation.z += .008;
-	knives.mesh.rotation.z += .008;
-	moneyz.mesh.rotation.z += .008;
+	clouds.mesh.rotation.z += .005;
+	knives.mesh.rotation.z += .001;
+	moneyz.mesh.rotation.z += .001;
 
 	// money.mesh.rotation.z += .005;
 
@@ -552,14 +552,17 @@ function normalize(v,vmin,vmax,tmin, tmax){
 
 }
 
+var allTheMoneyDeeDoos;
+
 function checkGetMoney() {
 	// console.log(dog.mesh.position.x)
 	// console.log(dog.mesh.position.y)
 	//for each mesh
-	for (var i = 0; i < moneyzArray.length; i++) {
+	allTheMoneyDeeDoos = scene.children[4].children;
+	for (var i = 0; i < allTheMoneyDeeDoos.length; i++) {
 		var position = new THREE.Vector3();
-		moneyX = position.setFromMatrixPosition(moneyzArray[i].mesh.matrixWorld).x;
-		moneyY = position.setFromMatrixPosition(moneyzArray[i].mesh.matrixWorld).y;
+		moneyX = position.setFromMatrixPosition(allTheMoneyDeeDoos[i].matrixWorld).x;
+		moneyY = position.setFromMatrixPosition(allTheMoneyDeeDoos[i].matrixWorld).y;
 
 
 		var mXRange = [moneyX-12, moneyX + 5];
@@ -570,24 +573,26 @@ function checkGetMoney() {
 
 		if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
 			&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
-			scene.remove(moneyzArray[i].mesh)
-
+			allTheMoneyDeeDoos.splice(allTheMoneyDeeDoos[i],1)
 			addMoney();
-			moneyzArray.splice(i,1);
 		}
 	}
 }
 
+var allTheKnifeyDeeDoos;
 
 function checkGetStabbed() {
 	// console.log(dog.mesh.position.x)
 	// console.log(dog.mesh.position.y)
 	//for each mesh
-	for (var i = 0; i < knivesArray.length; i++) {
-		var position = new THREE.Vector3();
-		knifeX = position.setFromMatrixPosition(knivesArray[i].mesh.matrixWorld).x;
-		knifeY = position.setFromMatrixPosition(knivesArray[i].mesh.matrixWorld).y;
 
+	var allTheKnifeyDeeDoos = scene.children[5].children;
+
+
+	for (var i = 0; i < allTheKnifeyDeeDoos.length; i++) {
+		var position = new THREE.Vector3();
+		knifeX = position.setFromMatrixPosition(allTheKnifeyDeeDoos[i].matrixWorld).x;
+		knifeY = position.setFromMatrixPosition(allTheKnifeyDeeDoos[i].matrixWorld).y;
 
 		var mXRange = [knifeX-12, knifeX + 5];
 		var mYRange = [knifeY-5, knifeY + 5];
@@ -597,10 +602,9 @@ function checkGetStabbed() {
 
 		if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
 			&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
-			scene.remove(knivesArray[i].mesh)
+			allTheKnifeyDeeDoos.splice(allTheKnifeyDeeDoos[i],1)
 
 			deductMoney();
-			knivesArray.splice(i,1);
 		}
 	}
 }
@@ -623,8 +627,8 @@ function start() {
 	buildWallStreet();
 	// buildSky();
 	buildClouds();
-	buildMoneyz();
-	buildKnives();
+	buildMoneyz(); //this is child 4
+	buildKnives(); //this is child 5
 	buildDog();
 	// // start a loop that will update the objects' positions
 	// // and render the scene on each frame
