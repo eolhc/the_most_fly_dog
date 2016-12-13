@@ -489,7 +489,8 @@ function handleMouseMove(event) {
 };
 
 function updateDogPos() {
-	checkCollision();
+	checkGetMoney();
+	checkGetStabbed();
 
 	// let's move the airplane between -100 and 100 on the horizontal axis,
 	// and between 25 and 175 on the vertical axis,
@@ -517,13 +518,18 @@ function normalize(v,vmin,vmax,tmin, tmax){
 
 }
 
-function checkCollision() {
+function checkGetMoney() {
 	// console.log(dog.mesh.position.x)
 	// console.log(dog.mesh.position.y)
 	//for each mesh
 	for (var i = 0; i < allMoneyz.length; i++) {
-		var mXRange = [allMoneyz[i].mesh.position.x-12, allMoneyz[i].mesh.position.x + 5];
-		var mYRange = [allMoneyz[i].mesh.position.y-5, allMoneyz[i].mesh.position.y + 5];
+		var position = new THREE.Vector3();
+		moneyX = position.setFromMatrixPosition(allMoneyz[i].mesh.matrixWorld).x;
+		moneyY = position.setFromMatrixPosition(allMoneyz[i].mesh.matrixWorld).y;
+
+
+		var mXRange = [moneyX-12, moneyX + 5];
+		var mYRange = [moneyY-5, moneyY + 5];
 		//give a range to the dog
 		var dogXRange = [dog.mesh.position.x - 15, dog.mesh.position.x]
 		var dogYRange = [dog.mesh.position.y - 5, dog.mesh.position.y + 10]
@@ -531,17 +537,51 @@ function checkCollision() {
 		if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
 			&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
 			scene.remove(allMoneyz[i].mesh)
-			updateScore();
+
+			addMoney();
 			allMoneyz.splice(i,1);
 		}
 	}
-
 }
 
-function updateScore() {
+
+function checkGetStabbed() {
+	// console.log(dog.mesh.position.x)
+	// console.log(dog.mesh.position.y)
+	//for each mesh
+	for (var i = 0; i < allKnives.length; i++) {
+		var position = new THREE.Vector3();
+		knifeX = position.setFromMatrixPosition(allKnives[i].mesh.matrixWorld).x;
+		knifeY = position.setFromMatrixPosition(allKnives[i].mesh.matrixWorld).y;
+
+
+		var mXRange = [knifeX-12, knifeX + 5];
+		var mYRange = [knifeY-5, knifeY + 5];
+		//give a range to the dog
+		var dogXRange = [dog.mesh.position.x - 15, dog.mesh.position.x]
+		var dogYRange = [dog.mesh.position.y - 5, dog.mesh.position.y + 10]
+
+		if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
+			&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
+			scene.remove(allKnives[i].mesh)
+
+			deductMoney();
+			allKnives.splice(i,1);
+		}
+	}
+}
+
+
+function addMoney() {
 	points += 1;
 	$('#amount').text(points)
 }
+
+function deductMoney() {
+	points -= 1;
+	$('#amount').text(points)
+}
+
 
 function start() {
 	buildScene();
