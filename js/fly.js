@@ -9,8 +9,8 @@ var Colors = {
 };
 
 var points = 0;
-var allMoneyz = [];
-var allKnives = [];
+var moneyzArray = [];
+var knivesArray = [];
 
 
 var scene, camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
@@ -227,9 +227,80 @@ Cloud = function(){
 	}
 }
 
+allMoneyz = function() {
+	this.mesh = new THREE.Object3D();
+	// let's scatter some money in the sky
+	// this.mesh = new THREE.Object3D();
+	this.nMoneyz = 20;
+
+	var that = this;
+
+	var stepMoneyAngle = Math.PI*2;
+
+
+	for (var i = 0; i < this.nMoneyz; i++) {
+		m = new Money();
+
+		moneyzArray.push(m);
+	}
+
+	setTimeout(function() {
+		moneyzArray.forEach(function(m) {
+			a = stepMoneyAngle * Math.random(20);
+			h = 700 + Math.random() * 50;
+
+			m.mesh.position.y = Math.sin(a) * h;
+			m.mesh.position.x = Math.cos(a) * h;
+
+			m.mesh.rotation.z = a + Math.PI/2;
+			m.mesh.position.z = 0;
+
+			s = 0.5+Math.random()*0.5;
+			m.mesh.scale.set(s,s,s);
+
+			that.mesh.add(m.mesh);
+		})
+	}, 1000)
+}
+
+allKnives = function() {
+	this.mesh = new THREE.Object3D();
+
+	this.nKnives = 20;
+
+	var that = this;
+
+	var stepKnifeAngle = Math.PI*2;
+
+
+	for (var i = 0; i < this.nKnives; i++) {
+		k = new Knife();
+
+		knivesArray.push(k);
+	}
+
+	setTimeout(function() {
+		knivesArray.forEach(function(k) {
+			a = stepKnifeAngle * Math.random(20);
+			h = 700 + Math.random() * 50;
+
+			k.mesh.position.y = Math.sin(a) * h;
+			k.mesh.position.x = Math.cos(a) * h;
+
+			k.mesh.rotation.z = a + Math.PI/2;
+			k.mesh.position.z = 0;
+
+			s = 0.5+Math.random()*0.5;
+			k.mesh.scale.set(s,s,s);
+
+			that.mesh.add(k.mesh);
+		})
+	}, 1000)
+
+}
 
 // Define a Sky Object
-Sky = function(){
+allClouds = function(){
 	// Create an empty container
 	// CREATES A WHOLE BUNCH OF CLOUDS
 
@@ -271,89 +342,49 @@ Sky = function(){
 		// do not forget to add the mesh of each cloud in the scene
 		this.mesh.add(c.mesh);
 	}
-
-	// let's scatter some money in the sky
-	// this.mesh = new THREE.Object3D();
-	this.nMoneyz = 20;
-
-	var that = this;
-
-	var stepMoneyAngle = Math.PI*2;
-
-
-	for (var i = 0; i < this.nMoneyz; i++) {
-		m = new Money();
-
-		allMoneyz.push(m);
-	}
-
-	setTimeout(function() {
-		allMoneyz.forEach(function(m) {
-			a = stepMoneyAngle * Math.random(20);
-			h = 700 + Math.random() * 50;
-
-			m.mesh.position.y = Math.sin(a) * h;
-			m.mesh.position.x = Math.cos(a) * h;
-
-			m.mesh.rotation.z = a + Math.PI/2;
-			m.mesh.position.z = 0;
-
-			s = 0.5+Math.random()*0.5;
-			m.mesh.scale.set(s,s,s);
-
-			that.mesh.add(m.mesh);
-		})
-	}, 1000)
-
-
-	this.nKnives = 20;
-
-	var that = this;
-
-	var stepKnifeAngle = Math.PI*2;
-
-
-	for (var i = 0; i < this.nKnives; i++) {
-		k = new Knife();
-
-		allKnives.push(k);
-	}
-
-	setTimeout(function() {
-		allKnives.forEach(function(k) {
-			a = stepKnifeAngle * Math.random(20);
-			h = 700 + Math.random() * 50;
-
-			k.mesh.position.y = Math.sin(a) * h;
-			k.mesh.position.x = Math.cos(a) * h;
-
-			k.mesh.rotation.z = a + Math.PI/2;
-			k.mesh.position.z = 0;
-
-			s = 0.5+Math.random()*0.5;
-			k.mesh.scale.set(s,s,s);
-
-			that.mesh.add(k.mesh);
-		})
-	}, 1000)
 }
+
+
 
 // Now we instantiate the sky and push its center a bit
 // towards the bottom of the screen
 
-var sky;
+// var sky;
+//
+// function buildSky(){
+// 	sky = new Sky();
+// 	sky.mesh.position.y = -600;
+// 	scene.add(sky.mesh);
+// 	// money = new Money();
+// 	// setTimeout(function(){
+// 	// 	scene.add(money.mesh)
+// 	// },1000);
+// 	// allMoneyz.push(money);
+// }
 
-function buildSky(){
-	sky = new Sky();
-	sky.mesh.position.y = -600;
-	scene.add(sky.mesh);
-	// money = new Money();
-	// setTimeout(function(){
-	// 	scene.add(money.mesh)
-	// },1000);
-	// allMoneyz.push(money);
+var clouds;
+
+function buildClouds() {
+	clouds = new allClouds();
+	clouds.mesh.position.y = -600;
+	scene.add(clouds.mesh)
 }
 
+var knives;
+
+function buildKnives() {
+	knives = new allKnives();
+	knives.mesh.position.y = -600;
+	scene.add(knives.mesh)
+}
+
+var moneyz;
+
+function buildMoneyz() {
+	moneyz = new allMoneyz();
+	moneyz.mesh.position.y = -600;
+	scene.add(moneyz.mesh)
+}
 
 var Dog = function() {
   this.mesh = new THREE.Object3D();
@@ -460,7 +491,10 @@ function buildDog() {
 function loop() {
 
 	wallStreet.mesh.rotation.z += .005;
-	sky.mesh.rotation.z += .008;
+	clouds.mesh.rotation.z += .008;
+	knives.mesh.rotation.z += .008;
+	moneyz.mesh.rotation.z += .008;
+
 	// money.mesh.rotation.z += .005;
 
 
@@ -522,10 +556,10 @@ function checkGetMoney() {
 	// console.log(dog.mesh.position.x)
 	// console.log(dog.mesh.position.y)
 	//for each mesh
-	for (var i = 0; i < allMoneyz.length; i++) {
+	for (var i = 0; i < moneyzArray.length; i++) {
 		var position = new THREE.Vector3();
-		moneyX = position.setFromMatrixPosition(allMoneyz[i].mesh.matrixWorld).x;
-		moneyY = position.setFromMatrixPosition(allMoneyz[i].mesh.matrixWorld).y;
+		moneyX = position.setFromMatrixPosition(moneyzArray[i].mesh.matrixWorld).x;
+		moneyY = position.setFromMatrixPosition(moneyzArray[i].mesh.matrixWorld).y;
 
 
 		var mXRange = [moneyX-12, moneyX + 5];
@@ -536,10 +570,10 @@ function checkGetMoney() {
 
 		if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
 			&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
-			scene.remove(allMoneyz[i].mesh)
+			scene.remove(moneyzArray[i].mesh)
 
 			addMoney();
-			allMoneyz.splice(i,1);
+			moneyzArray.splice(i,1);
 		}
 	}
 }
@@ -549,10 +583,10 @@ function checkGetStabbed() {
 	// console.log(dog.mesh.position.x)
 	// console.log(dog.mesh.position.y)
 	//for each mesh
-	for (var i = 0; i < allKnives.length; i++) {
+	for (var i = 0; i < knivesArray.length; i++) {
 		var position = new THREE.Vector3();
-		knifeX = position.setFromMatrixPosition(allKnives[i].mesh.matrixWorld).x;
-		knifeY = position.setFromMatrixPosition(allKnives[i].mesh.matrixWorld).y;
+		knifeX = position.setFromMatrixPosition(knivesArray[i].mesh.matrixWorld).x;
+		knifeY = position.setFromMatrixPosition(knivesArray[i].mesh.matrixWorld).y;
 
 
 		var mXRange = [knifeX-12, knifeX + 5];
@@ -563,10 +597,10 @@ function checkGetStabbed() {
 
 		if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
 			&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
-			scene.remove(allKnives[i].mesh)
+			scene.remove(knivesArray[i].mesh)
 
 			deductMoney();
-			allKnives.splice(i,1);
+			knivesArray.splice(i,1);
 		}
 	}
 }
@@ -587,7 +621,10 @@ function start() {
 	buildScene();
 	buildLights();
 	buildWallStreet();
-	buildSky();
+	// buildSky();
+	buildClouds();
+	buildMoneyz();
+	buildKnives();
 	buildDog();
 	// // start a loop that will update the objects' positions
 	// // and render the scene on each frame
