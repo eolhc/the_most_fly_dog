@@ -498,8 +498,6 @@ function updateDogPos() {
 	var targetX = normalize(mousePos.x, -.75, .75, -100, 100);
 	var targetY = normalize(mousePos.y, -.75, .75, 25, 175);
 	dog.mesh.position.y += (targetY-dog.mesh.position.y)*0.1;
-
-
 	// update the airplane's position
 	dog.mesh.position.y = targetY;
 	dog.mesh.position.x = targetX;
@@ -522,26 +520,27 @@ function normalize(v,vmin,vmax,tmin, tmax){
 function checkCollision() {
 	// console.log(dog.mesh.position.x)
 	// console.log(dog.mesh.position.y)
-	//give a range to the dog
-	var mXRange = [m.mesh.position.x-12, m.mesh.position.x + 5];
-	var mYRange = [m.mesh.position.y-5, m.mesh.position.y + 5];
+	//for each mesh
+	for (var i = 0; i < allMoneyz.length; i++) {
+		var mXRange = [allMoneyz[i].mesh.position.x-12, allMoneyz[i].mesh.position.x + 5];
+		var mYRange = [allMoneyz[i].mesh.position.y-5, allMoneyz[i].mesh.position.y + 5];
+		//give a range to the dog
+		var dogXRange = [dog.mesh.position.x - 15, dog.mesh.position.x]
+		var dogYRange = [dog.mesh.position.y - 5, dog.mesh.position.y + 10]
 
-	var dogXRange = [dog.mesh.position.x - 15, dog.mesh.position.x]
-	var dogYRange = [dog.mesh.position.y - 5, dog.mesh.position.y + 10]
-
-	if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
-		&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
-		scene.remove(m.mesh)
-		updateScore();
-		allMoneyz.splice(0,1);
+		if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
+			&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
+			scene.remove(allMoneyz[i].mesh)
+			updateScore();
+			allMoneyz.splice(i,1);
+		}
 	}
+
 }
 
 function updateScore() {
-	if (allMoneyz.length == 1){
-		points += 1;
-		$('#amount').text(points)
-	}
+	points += 1;
+	$('#amount').text(points)
 }
 
 function start() {
