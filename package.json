@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "cannon": "github:schteppe/cannon.js"
+    "cannon": "github:schteppe/cannon.js",
+    "gulp": "^3.9.1",
+    "gulp-connect": "^5.0.0",
+    "gulp-sass": "^3.0.0",
+    "node-sass": "^4.0.0"
   },
   "devDependencies": {},
   "scripts": {

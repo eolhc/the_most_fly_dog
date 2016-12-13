@@ -20,7 +20,7 @@ function buildScene() {
   HEIGHT = window.innerHeight;
   WIDTH = window.innerWidth;
 
-  scene = new THREE.Scene
+  scene = new THREE.Scene;
 
   scene.fog = new THREE.Fog(0xF1FFFA, 100, 950);
 
