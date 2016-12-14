@@ -484,7 +484,6 @@ function buildDog() {
 	dog.mesh.scale.set(.25,.25,.25);
 	dog.mesh.position.y = 100;
 	scene.add(dog.mesh)
-
 }
 
 
@@ -632,3 +631,8 @@ function start() {
 }
 
 window.addEventListener('load', start, false);
+
+$(document).ready(function(){
+
+
+})

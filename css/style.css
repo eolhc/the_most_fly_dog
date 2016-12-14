@@ -2,11 +2,14 @@ body {
   font-family: Futura, Futura-Medium, "Futura Medium", "Century Gothic", CenturyGothic, "Apple Gothic", AppleGothic, "URW Gothic L", "Avant Garde", sans-serif;
   padding: 0;
   margin: 0;
+  cursor: none;
 }
 
 header {
   position: fixed;
-  width: 100%;
+  left: 25%;
+  width: 40%;
+  display: inline-block;
   margin: 0 auto;
   z-index: 100;
   text-align: center;
@@ -14,13 +17,14 @@ header {
 }
 
 #cash {
-  position: absolute;
-  width: 50%;
-  margin: 0 auto;
+  position: fixed;
+  display: inline-block;
+  width: 25%;
+  margin: 1em;
   text-align: center;
   z-index: 50;
-  right: 0;
-  bottom: 0;
+  left: 0;
+  top: 0;
 }
 
 #cash p {
@@ -40,16 +44,85 @@ header {
   background: linear-gradient(#A5DCE5, #F1FFFA);
 }
 
+#info, #menu {
+  display: inline-block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 1em;
+  margin: 1em;
+}
+
+#controls {
+  display: inline-block;
+}
+
 #info {
+  width: 25%;
+  background-color: rgba(241, 255, 250, 0.85);
+  border-radius: 20px;
+}
+
+#info .fa-window-close {
   position: absolute;
-  left: 0;
-  bottom: 0;
-  padding: 2em;
-  width: 30%;
+  right:1em;
+  top: 1em;
+  display: inline-block;
+}
+
+#menu .fa-question-circle {
+  display: inline-block;
+  height: 1em;
 }
 
 #amount {
   display: inline-block;
+}
+
+#play {
+  position: fixed;
+  left: 25%;
+  top: 35%;
+  width: 40%;
+  display: inline-block;
+  margin: 0 auto;
+  z-index: 50;
+  text-align: center;
+  padding: 1em;
+  background-color: rgba(241, 255, 250, 0.85);
+  border-radius: 20px;
+}
+
+#letsplay {
+  position: relative;
+  padding: 0.5em;
+  border: #ED6A5A 2px solid;
+  border-radius: 20px;
+  z-index: 60;
+  display: inline-block;
+}
+
+#letsplay:hover {
+  transform: scale(1.2);
+}
+
+#letsplay h2 {
+  line-height: 0.1em;
+  color: #ED6A5A;
+  cursor: pointer;
+}
+
+
+
+/*.fa-play {
+  display: block;
+  color: #ED6A5A;
+  cursor: pointer;
+}*/
+
+h1 {
+  color: #ED6A5A;
+  font-size: 3em;
 }
 
 h2 {
@@ -59,4 +132,10 @@ h2 {
 p {
   color: #524136;
   font-size: 0.8em;
+}
+
+.fa {
+  padding: 0.1em;
+  color: #ED6A5A;
+  cursor: pointer;
 }
