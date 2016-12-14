@@ -485,8 +485,8 @@ function loop() {
 	if (paused == false) {
 		wallStreet.mesh.rotation.z += .005;
 		clouds.mesh.rotation.z += .005;
-		knives.mesh.rotation.z += .002;
-		moneyz.mesh.rotation.z += .002;
+		knives.mesh.rotation.z += .008;
+		moneyz.mesh.rotation.z += .008;
 		$(document.body).css("cursor", "none")
 		updateDogPos();
 	} else {
@@ -618,7 +618,7 @@ function deductMoney() {
 }
 
 function checkWin() {
-	if (points == 1) {
+	if (points == 10) {
 		paused = true;
 		loop();
 		$('#outcome').toggle();
