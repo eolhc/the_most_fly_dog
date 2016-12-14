@@ -2,6 +2,7 @@ $(document).ready(function() {
   $('#menu').show();
   $('#info').hide();
   $('#controls').hide();
+  $('#outcome').hide();
 
   $('.fa-window-close').on("mousedown", function() {
     console.log("close window!!!!");
@@ -14,7 +15,7 @@ $(document).ready(function() {
     $('#info').toggle();
     $('#menu').toggle();
   })
-  // 
+  //
   // $('#letsplay').on("mousedown", function() {
   //   $('#play').hide();
   //   $('#controls').show();

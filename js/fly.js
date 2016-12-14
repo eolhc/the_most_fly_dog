@@ -407,7 +407,7 @@ var Dog = function() {
 	var rightEye = new THREE.Mesh(geomRightEye, matRightEye);
 	rightEye.position.x = 40;
 	rightEye.position.y = 10;
-	rightEye.position.z = 30;
+	rightEye.position.z = 25;
 	rightEye.receiveShadow = true;
 	this.mesh.add(rightEye)
 
@@ -416,7 +416,7 @@ var Dog = function() {
 	var leftEye = new THREE.Mesh(geomLeftEye, matLeftEye);
 	leftEye.position.x = 40;
 	leftEye.position.y = 10;
-	leftEye.position.z = -30;
+	leftEye.position.z = -25;
 	leftEye.receiveShadow = true;
 	this.mesh.add(leftEye)
 
@@ -440,20 +440,20 @@ var Dog = function() {
 
 	var geomLeftEar = new THREE.BoxGeometry(20,30,10,1,1,1);
 	var matLeftEar = new THREE.MeshPhongMaterial({color:Colors.black, shading:THREE.FlatShading});
-	var leftEar = new THREE.Mesh(geomLeftEar, matLeftEar);
-	leftEar.position.x = 20;
-	leftEar.position.y = 10;
-	leftEar.position.z = -20;
-	leftEar.castShadow = true;
-	leftEar.receiveShadow = true;
-	this.mesh.add(leftEar);
+	this.leftEar = new THREE.Mesh(geomLeftEar, matLeftEar);
+	this.leftEar.position.x = 20;
+	this.leftEar.position.y = 10;
+	this.leftEar.position.z = -25;
+	this.leftEar.castShadow = true;
+	this.leftEar.receiveShadow = true;
+	this.mesh.add(this.leftEar);
 
 	var geomRightEar = new THREE.BoxGeometry(20,30,10,1,1,1);
 	var matRightEar = new THREE.MeshPhongMaterial({color:Colors.black, shading:THREE.FlatShading});
 	this.rightEar = new THREE.Mesh(geomRightEar, matRightEar);
 	this.rightEar.position.x = 20;
 	this.rightEar.position.y = 10;
-	this.rightEar.position.z = 20;
+	this.rightEar.position.z = 25;
 	this.rightEar.castShadow = true;
 	this.rightEar.receiveShadow = true;
 	this.mesh.add(this.rightEar);
@@ -485,8 +485,8 @@ function loop() {
 	if (paused == false) {
 		wallStreet.mesh.rotation.z += .005;
 		clouds.mesh.rotation.z += .005;
-		knives.mesh.rotation.z += .008;
-		moneyz.mesh.rotation.z += .008;
+		knives.mesh.rotation.z += .002;
+		moneyz.mesh.rotation.z += .002;
 		$(document.body).css("cursor", "none")
 		updateDogPos();
 	} else {
@@ -520,6 +520,7 @@ function handleMouseMove(event) {
 };
 
 function updateDogPos() {
+	checkWin();
 	checkGetMoney();
 	checkGetStabbed();
 
@@ -535,6 +536,8 @@ function updateDogPos() {
 	dog.mesh.position.x = targetX;
 	dog.tail.rotation.x += 0.3;
 	dog.rightEar.rotation.y += 0.5;
+	dog.leftEar.rotation.y += 0.5;
+
 
 }
 
@@ -606,6 +609,7 @@ function checkGetStabbed() {
 function addMoney() {
 	points += 1;
 	$('#amount').text(points)
+	// $('#amount').css("transform","scale(1.2)")
 }
 
 function deductMoney() {
@@ -613,6 +617,23 @@ function deductMoney() {
 	$('#amount').text(points)
 }
 
+function checkWin() {
+	if (points == 1) {
+		paused = true;
+		loop();
+		$('#outcome').toggle();
+		winAnimation();
+	}
+}
+
+function winAnimation() {
+	requestAnimationFrame( winAnimation );
+	dog.mesh.scale.set(.5,.5,.5);
+	dog.mesh.rotation.x += 0.005;
+	dog.mesh.rotation.y += 0.01;
+
+	renderer.render( scene, camera );
+}
 
 function start() {
 	buildScene();
