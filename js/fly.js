@@ -623,7 +623,7 @@ function checkWin() {
 		loop();
 		$('#outcome').toggle();
 		winAnimation();
-	} else if (points == -10) {
+	} else if (points == -5) {
 		paused = true;
 		loop();
 		$('outcome').toggle();
