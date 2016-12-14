@@ -487,13 +487,15 @@ function loop() {
 		clouds.mesh.rotation.z += .005;
 		knives.mesh.rotation.z += .008;
 		moneyz.mesh.rotation.z += .008;
+		$(document.body).css("cursor", "none")
+		updateDogPos();
 	} else {
 		wallStreet.mesh.rotation.z += 0;
 		clouds.mesh.rotation.z += 0;
 		knives.mesh.rotation.z += 0;
 		moneyz.mesh.rotation.z += 0;
+		$(document.body).css("cursor", "default")
 	}
-	updateDogPos();
 
   renderer.render(scene, camera);
   // console.log("where is my bloody wallstreet")
