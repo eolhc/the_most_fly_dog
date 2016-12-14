@@ -11,6 +11,7 @@ var Colors = {
 var points = 0;
 var moneyzArray = [];
 var knivesArray = [];
+var paused = true;
 
 
 var scene, camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
@@ -118,18 +119,12 @@ var WallStreet = function() {
 			that.mesh = new THREE.Mesh( geometry, material );
 			that.mesh.position.y = -50
 		});
-		console.log(that)
 }
 
 var wallStreet;
 
 function buildWallStreet() {
- //
 	wallStreet = new WallStreet();
-	// console.log(wallStreet)
-
-	 console.log(wallStreet.mesh)
-
 	setTimeout(function(){
 		scene.add(wallStreet.mesh)}, 2000);
  // renderer.render(scene, camera)
@@ -158,7 +153,6 @@ Money = function() {
 			 that.mesh = new THREE.Mesh( geometry, material );
 			//  that.mesh.position.y= 50;
 		});
-		console.log(that)
 }
 
 Knife = function() {
@@ -183,7 +177,6 @@ Knife = function() {
 			 that.mesh = new THREE.Mesh( geometry, material );
 			 that.mesh.position.y= 150;
 		});
-		console.log(that)
 }
 
 
@@ -488,14 +481,18 @@ function buildDog() {
 
 
 function loop() {
-	wallStreet.mesh.rotation.z += .005;
-	clouds.mesh.rotation.z += .005;
-	knives.mesh.rotation.z += .008;
-	moneyz.mesh.rotation.z += .008;
-
 	// money.mesh.rotation.z += .005;
-
-
+	if (paused == false) {
+		wallStreet.mesh.rotation.z += .005;
+		clouds.mesh.rotation.z += .005;
+		knives.mesh.rotation.z += .008;
+		moneyz.mesh.rotation.z += .008;
+	} else {
+		wallStreet.mesh.rotation.z += 0;
+		clouds.mesh.rotation.z += 0;
+		knives.mesh.rotation.z += 0;
+		moneyz.mesh.rotation.z += 0;
+	}
 	updateDogPos();
 
   renderer.render(scene, camera);
@@ -619,6 +616,7 @@ function start() {
 	buildScene();
 	buildLights();
 	buildWallStreet();
+
 	// buildSky();
 	buildClouds();
 	buildMoneyz(); //this is child 4
@@ -632,7 +630,25 @@ function start() {
 
 window.addEventListener('load', start, false);
 
-$(document).ready(function(){
+
+$(document).ready(function() {
+	$('#letsplay').on("mousedown", function() {
+		paused = false;
+		$('#play').hide();
+		$('#controls').show();
+		$('.fa-play').hide();
+		// updateDogPos();
+		loop();
+	})
+
+	$('#fa-pause').on("mousedown", function() {
+		paused = false;
+		$('#play').hide();
+		$('#controls').show();
+		$('.fa-play').hide();
+		// updateDogPos();
+		loop();
+	})
 
 
-})
+});
