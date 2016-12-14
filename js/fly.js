@@ -485,8 +485,8 @@ function loop() {
 	if (paused == false) {
 		wallStreet.mesh.rotation.z += .005;
 		clouds.mesh.rotation.z += .005;
-		knives.mesh.rotation.z += .008;
-		moneyz.mesh.rotation.z += .008;
+		knives.mesh.rotation.z += .002;
+		moneyz.mesh.rotation.z += .002;
 		$(document.body).css("cursor", "none")
 		updateDogPos();
 	} else {
@@ -618,11 +618,16 @@ function deductMoney() {
 }
 
 function checkWin() {
-	if (points == 10) {
+	if (points == 1) {
 		paused = true;
 		loop();
 		$('#outcome').toggle();
 		winAnimation();
+	} else if (points == -10) {
+		paused = true;
+		loop();
+		$('outcome').toggle();
+		loseAnimation();
 	}
 }
 
@@ -632,7 +637,15 @@ function winAnimation() {
 	dog.mesh.rotation.x += 0.005;
 	dog.mesh.rotation.y += 0.01;
 
-	renderer.render( scene, camera );
+	renderer.render(scene, camera);
+}
+
+function loseAnimation() {
+	requestAnimationFrame( loseAnimation );
+	dog.mesh.scale.set(.5,.5,.5);
+	dog.mesh.position.y -= 2;
+
+	renderer.render (scene, camera)
 }
 
 function start() {
