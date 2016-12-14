@@ -104,7 +104,7 @@ var WallStreet = function() {
   // load a resource
   loader.load(
   	// resource URL
-  	'../textures/brickwall.jpg',
+  	'brickwall.jpg',
   	// Function when resource is loaded
   	function ( texture ) {
   		// do something with the texture
@@ -139,7 +139,7 @@ Money = function() {
 	// load a resource
 	loader.load(
 		// resource URL
-		'../textures/cash.png',
+		'cash.png',
 		// Function when resource is loaded
 		function ( texture ) {
 			// do something with the texture
@@ -163,7 +163,7 @@ Knife = function() {
 	// load a resource
 	loader.load(
 		// resource URL
-		'../textures/knife.png',
+		'knife.png',
 		// Function when resource is loaded
 		function ( texture ) {
 			// do something with the texture
