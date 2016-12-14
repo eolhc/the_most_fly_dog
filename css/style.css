@@ -32,7 +32,7 @@ header {
 }
 
 #cash img {
-  width: 15%;
+  width: 20%;
   display: inline-block;
 }
 
@@ -127,6 +127,7 @@ h1 {
 
 h2 {
   color: #ED6A5A;
+  display: inline-block;
 }
 
 p {
