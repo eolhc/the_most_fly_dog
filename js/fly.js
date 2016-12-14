@@ -485,8 +485,8 @@ function loop() {
 	if (paused == false) {
 		wallStreet.mesh.rotation.z += .005;
 		clouds.mesh.rotation.z += .005;
-		knives.mesh.rotation.z += .008;
-		moneyz.mesh.rotation.z += .008;
+		knives.mesh.rotation.z += .005;
+		moneyz.mesh.rotation.z += .005;
 		$(document.body).css("cursor", "none")
 		updateDogPos();
 	} else {
