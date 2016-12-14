@@ -641,14 +641,20 @@ $(document).ready(function() {
 		loop();
 	})
 
-	$('#fa-pause').on("mousedown", function() {
-		paused = false;
-		$('#play').hide();
-		$('#controls').show();
-		$('.fa-play').hide();
+	$('.fa-pause').on("mousedown", function() {
+		paused = true;
+		$('.fa-play').show();
+		$('.fa-pause').hide();
 		// updateDogPos();
 		loop();
 	})
 
+	$('.fa-play').on("mousedown", function() {
+		paused = false;
+		$('.fa-pause').show();
+		$('.fa-play').hide();
+		// updateDogPos();
+		loop();
+	})
 
 });
