@@ -15,11 +15,4 @@ $(document).ready(function() {
     $('#info').toggle();
     $('#menu').toggle();
   })
-  //
-  // $('#letsplay').on("mousedown", function() {
-  //   $('#play').hide();
-  //   $('#controls').show();
-  //   $('.fa-play').hide();
-  // })
-
 })

@@ -79,14 +79,14 @@ header {
   display: inline-block;
 }
 
-#play {
+#play, #outcome {
   position: fixed;
   left: 25%;
   top: 35%;
   width: 40%;
   display: inline-block;
   margin: 0 auto;
-  z-index: 50;
+  z-index: 100;
   text-align: center;
   padding: 1em;
   background-color: rgba(241, 255, 250, 0.85);

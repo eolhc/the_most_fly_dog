@@ -12,7 +12,8 @@ var points = 0;
 var moneyzArray = [];
 var knivesArray = [];
 var paused = true;
-
+var winPoints = 10;
+var losePoints = -10;
 
 var scene, camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
 		renderer, container;
@@ -52,7 +53,6 @@ function buildScene() {
   container = $('#wall-street');
   //adds the domElement of the rendered to wallstreet
   container.append(renderer.domElement);
-  renderer.render(scene, camera);
   window.addEventListener('resize', handleWindowResize, false);
 
 }
@@ -67,9 +67,6 @@ function handleWindowResize() {
 }
 
 var hemisphereLight, shadowLight;
-//set the mood for flying dog
-//let's name him now
-//i name my flying dog Doggo
 
 function buildLights() {
   hemisphereLight = new THREE.HemisphereLight(0xaaaaaa,0x000000, .9)
@@ -83,31 +80,20 @@ function buildLights() {
 	shadowLight.shadow.camera.bottom = -400;
 	shadowLight.shadow.camera.near = 1;
 	shadowLight.shadow.camera.far = 1000;
-
   shadowLight.shadow.mapSize.width = 2048;
   shadowLight.shadow.mapSize.height = 2048;
-
   scene.add(hemisphereLight);
   scene.add(shadowLight);
 	scene.add(ambientLight);
   console.log('lights are on')
 }
 
-//build wall-street
-
-
-var WallStreet = function() {
+WallStreet = function() {
 	var loader = new THREE.TextureLoader();
-
 	var that = this;
-
-  // load a resource
   loader.load(
-  	// resource URL
   	'brickwall.jpg',
-  	// Function when resource is loaded
   	function ( texture ) {
-  		// do something with the texture
   		var material = new THREE.MeshBasicMaterial( {
   			map: texture,
         transparent: true,
@@ -118,31 +104,15 @@ var WallStreet = function() {
 			geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
 			that.mesh = new THREE.Mesh( geometry, material );
 			that.mesh.position.y = -50
-		});
+	});
 }
-
-var wallStreet;
-
-function buildWallStreet() {
-	wallStreet = new WallStreet();
-	setTimeout(function(){
-		scene.add(wallStreet.mesh)}, 2000);
- // renderer.render(scene, camera)
-}
-
 
 Money = function() {
 	var loader = new THREE.TextureLoader();
-
 	var that = this;
-
-	// load a resource
 	loader.load(
-		// resource URL
 		'cash.png',
-		// Function when resource is loaded
 		function ( texture ) {
-			// do something with the texture
 			var material = new THREE.MeshBasicMaterial( {
 				map: texture,
 				transparent: true,
@@ -152,15 +122,12 @@ Money = function() {
 			 geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
 			 that.mesh = new THREE.Mesh( geometry, material );
 			//  that.mesh.position.y= 50;
-		});
+	});
 }
 
 Knife = function() {
 	var loader = new THREE.TextureLoader();
-
 	var that = this;
-
-	// load a resource
 	loader.load(
 		// resource URL
 		'knife.png',
@@ -184,38 +151,28 @@ Cloud = function(){
 	// Create an empty container that will hold the different parts of the cloud
 	//CREATES A SINGLE CLOUD
 	this.mesh = new THREE.Object3D();
-
 	// create a cube geometry;
 	// this shape will be duplicated to create the cloud
 	var geom = new THREE.BoxGeometry(20,20,20);
-
 	// create a material; a simple white material will do the trick
 	var mat = new THREE.MeshPhongMaterial();
 	mat.color.set(Colors.grey)
-
 	// duplicate the geometry a random number of times
 	var nBlocs = 3+Math.floor(Math.random()*3);
 	for (var i=0; i<nBlocs; i++ ){
-
 		// create the mesh by cloning the geometry
-		var m = new THREE.Mesh(geom, mat);
-
+		m = new THREE.Mesh(geom, mat);
 		// set the position and the rotation of each cube randomly
 		m.position.x = i*15;
 		m.position.y = Math.random()*10;
 		m.position.z = Math.random()*10;
 		m.rotation.z = Math.random()*Math.PI*2;
 		m.rotation.y = Math.random()*Math.PI*2;
-
 		// set the size of the cube randomly
-		var s = .1 + Math.random()*.9;
+		s = .1 + Math.random()*.9;
 		m.scale.set(s,s,s);
-
-		// allow each cube to cast and to receive shadows
 		m.castShadow = true;
 		m.receiveShadow = true;
-
-		// add the cube to the container we first created
 		this.mesh.add(m);
 	}
 }
@@ -337,48 +294,6 @@ allClouds = function(){
 	}
 }
 
-
-
-// Now we instantiate the sky and push its center a bit
-// towards the bottom of the screen
-
-// var sky;
-//
-// function buildSky(){
-// 	sky = new Sky();
-// 	sky.mesh.position.y = -600;
-// 	scene.add(sky.mesh);
-// 	// money = new Money();
-// 	// setTimeout(function(){
-// 	// 	scene.add(money.mesh)
-// 	// },1000);
-// 	// allMoneyz.push(money);
-// }
-
-var clouds;
-
-function buildClouds() {
-	clouds = new allClouds();
-	clouds.mesh.position.y = -600;
-	scene.add(clouds.mesh)
-}
-
-var knives;
-
-function buildKnives() {
-	knives = new allKnives();
-	knives.mesh.position.y = -600;
-	scene.add(knives.mesh)
-}
-
-var moneyz;
-
-function buildMoneyz() {
-	moneyz = new allMoneyz();
-	moneyz.mesh.position.y = -600;
-	scene.add(moneyz.mesh)
-}
-
 var Dog = function() {
   this.mesh = new THREE.Object3D();
 
@@ -470,6 +385,38 @@ var Dog = function() {
 
 }
 
+var wallStreet;
+
+function buildWallStreet() {
+	wallStreet = new WallStreet();
+	setTimeout(function(){
+		scene.add(wallStreet.mesh)}, 2000);
+}
+
+var clouds;
+
+function buildClouds() {
+	clouds = new allClouds();
+	clouds.mesh.position.y = -600;
+	scene.add(clouds.mesh)
+}
+
+var knives;
+
+function buildKnives() {
+	knives = new allKnives();
+	knives.mesh.position.y = -600;
+	scene.add(knives.mesh)
+}
+
+var moneyz;
+
+function buildMoneyz() {
+	moneyz = new allMoneyz();
+	moneyz.mesh.position.y = -600;
+	scene.add(moneyz.mesh)
+}
+
 var dog;
 
 function buildDog() {
@@ -479,16 +426,17 @@ function buildDog() {
 	scene.add(dog.mesh)
 }
 
-
 function loop() {
-	// money.mesh.rotation.z += .005;
 	if (paused == false) {
 		wallStreet.mesh.rotation.z += .005;
 		clouds.mesh.rotation.z += .005;
-		knives.mesh.rotation.z += .004;
-		moneyz.mesh.rotation.z += .004;
+		knives.mesh.rotation.z += .002;
+		moneyz.mesh.rotation.z += .002;
 		$(document.body).css("cursor", "none")
 		updateDogPos();
+		checkWin();
+		checkGetMoney();
+		checkGetStabbed();
 	} else {
 		wallStreet.mesh.rotation.z += 0;
 		clouds.mesh.rotation.z += 0;
@@ -498,10 +446,8 @@ function loop() {
 	}
 
   renderer.render(scene, camera);
-  // console.log("where is my bloody wallstreet")
 	requestAnimationFrame(loop);
 }
-
 
 var mousePos = {
 	x : 0,
@@ -520,9 +466,6 @@ function handleMouseMove(event) {
 };
 
 function updateDogPos() {
-	checkWin();
-	checkGetMoney();
-	checkGetStabbed();
 
 	// let's move the airplane between -100 and 100 on the horizontal axis,
 	// and between 25 and 175 on the vertical axis,
@@ -537,8 +480,6 @@ function updateDogPos() {
 	dog.tail.rotation.x += 0.3;
 	dog.rightEar.rotation.y += 0.5;
 	dog.leftEar.rotation.y += 0.5;
-
-
 }
 
 function normalize(v,vmin,vmax,tmin, tmax){
@@ -553,15 +494,14 @@ function normalize(v,vmin,vmax,tmin, tmax){
 }
 
 function checkGetMoney() {
-	// console.log(dog.mesh.position.x)
-	// console.log(dog.mesh.position.y)
-	//for each mesh
-	for (var i = 0; i < scene.children[4].children.length; i++) {
-		obj = scene.children[4].children[i]
-		objNumber = obj.length
+
+	m = moneyz.mesh;
+
+	for (var i = 0; i < m.children.length; i++) {
+		mChild = m.children[i]
 		var position = new THREE.Vector3();
-		moneyX = position.setFromMatrixPosition(obj.matrixWorld).x;
-		moneyY = position.setFromMatrixPosition(obj.matrixWorld).y;
+		moneyX = position.setFromMatrixPosition(mChild.matrixWorld).x;
+		moneyY = position.setFromMatrixPosition(mChild.matrixWorld).y;
 
 
 		var mXRange = [moneyX-12, moneyX + 5];
@@ -572,7 +512,7 @@ function checkGetMoney() {
 
 		if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
 			&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
-			scene.children[4].remove(obj);
+			m.remove(mChild);
 			addMoney();
 		}
 	}
@@ -580,16 +520,14 @@ function checkGetMoney() {
 
 
 function checkGetStabbed() {
-	// console.log(dog.mesh.position.x)
-	// console.log(dog.mesh.position.y)
-	//for each mesh
 
+	k = knives.mesh;
 
-	for (var i = 0; i < scene.children[5].children.length; i++) {
-		obj = scene.children[5].children[i];
+	for (var i = 0; i < k.children.length; i++) {
+		kChild = k.children[i];
 		var position = new THREE.Vector3();
-		knifeX = position.setFromMatrixPosition(obj.matrixWorld).x;
-		knifeY = position.setFromMatrixPosition(obj.matrixWorld).y;
+		knifeX = position.setFromMatrixPosition(kChild.matrixWorld).x;
+		knifeY = position.setFromMatrixPosition(kChild.matrixWorld).y;
 
 		var mXRange = [knifeX-12, knifeX + 5];
 		var mYRange = [knifeY-5, knifeY + 5];
@@ -599,7 +537,7 @@ function checkGetStabbed() {
 
 		if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
 			&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
-				scene.children[5].remove(obj);
+				k.remove(kChild);
 				deductMoney();
 		}
 	}
@@ -618,54 +556,50 @@ function deductMoney() {
 }
 
 function checkWin() {
-	if (points == 10) {
+	if (points == winPoints) {
 		paused = true;
-		loop();
-		$('#outcome').toggle();
-		winAnimation();
-	} else if (points <= -10) {
+		setInterval(winAnimation,50)
+		$('.fa-pause').hide();
+		$('.fa-repeat').show();
+	} else if (points == losePoints) {
 		paused = true;
-		loop();
-		$('outcome').toggle();
-		loseAnimation();
+		setInterval(loseAnimation,50)
+		$('.fa-pause').hide();
+		$('.fa-repeat').show();
 	}
 }
 
 function winAnimation() {
-	requestAnimationFrame( winAnimation );
-	dog.mesh.scale.set(.5,.5,.5);
-	dog.mesh.rotation.x += 0.005;
-	dog.mesh.rotation.y += 0.01;
-
-	renderer.render(scene, camera);
+	if (dog.mesh.scale.x < 2 && dog.mesh.scale.y < 2 && dog.mesh.scale.z < 2) {
+		dog.mesh.rotation.x += 0.1;
+		dog.mesh.rotation.y += 0.1;
+		dog.mesh.scale.x += 0.01;
+		dog.mesh.scale.y += 0.01;
+		dog.mesh.scale.z += 0.01;
+	}
 }
 
 function loseAnimation() {
-	requestAnimationFrame( loseAnimation );
-	dog.mesh.scale.set(.5,.5,.5);
-	dog.mesh.position.y -= 2;
-
-	renderer.render (scene, camera)
+	if (dog.mesh.position.y > -10) {
+		dog.mesh.scale.set(.5,.5,.5);
+		dog.mesh.position.y -= 5;
+	}
 }
 
 function start() {
 	buildScene();
 	buildLights();
 	buildWallStreet();
-
-	// buildSky();
 	buildClouds();
 	buildMoneyz(); //this is child 4
 	buildKnives(); //this is child 5
 	buildDog();
-	// // start a loop that will update the objects' positions
-	// // and render the scene on each frame
+
 	$(document).on("mousemove",handleMouseMove)
 	setTimeout(function(){loop()},2000);
 }
 
 window.addEventListener('load', start, false);
-
 
 $(document).ready(function() {
 	$('#letsplay').on("mousedown", function() {
@@ -673,24 +607,58 @@ $(document).ready(function() {
 		$('#play').hide();
 		$('#controls').show();
 		$('.fa-play').hide();
-		// updateDogPos();
-		loop();
+		$('.fa-repeat').hide();
 	})
 
 	$('.fa-pause').on("mousedown", function() {
 		paused = true;
 		$('.fa-play').show();
 		$('.fa-pause').hide();
-		// updateDogPos();
-		loop();
+
 	})
 
 	$('.fa-play').on("mousedown", function() {
 		paused = false;
 		$('.fa-pause').show();
 		$('.fa-play').hide();
-		// updateDogPos();
-		loop();
 	})
 
+	$('.fa-repeat').on("mousedown", function() {
+		console.log('sup');
+		points = 0;
+		$('#amount').text(points)
+		clearGame();
+		newGame();
+	})
 });
+
+function clearGame() {
+	d = dog.mesh;
+	k = knives.mesh;
+	m = moneyz.mesh;
+	for (var i = 0; i < 999; i++) {
+		window.clearInterval(i)
+	}
+
+	scene.remove(d)
+	scene.remove(k)
+	scene.remove(m)
+	// stopAnimation();
+}
+
+function stopAnimation() {
+	dog.mesh.rotation.x = 0;
+	dog.mesh.rotation.y = 0;
+	dog.mesh.scale.x = 0;
+	dog.mesh.scale.y = 0;
+	dog.mesh.scale.z = 0;
+	dog.mesh.position.y = 100;
+}
+
+function newGame() {
+	paused = false;
+	points = 0;
+	buildMoneyz(); //this is child 4
+	buildKnives(); //this is child 5
+	buildDog();
+}

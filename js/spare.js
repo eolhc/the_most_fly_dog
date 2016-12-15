@@ -27,6 +27,24 @@
 
 
 
+  // Now we instantiate the sky and push its center a bit
+  // towards the bottom of the screen
+
+  // var sky;
+  //
+  // function buildSky(){
+  // 	sky = new Sky();
+  // 	sky.mesh.position.y = -600;
+  // 	scene.add(sky.mesh);
+  // 	// money = new Money();
+  // 	// setTimeout(function(){
+  // 	// 	scene.add(money.mesh)
+  // 	// },1000);
+  // 	// allMoneyz.push(money);
+  // }
+
+
+
 
   //
   // Cloud = function() {
