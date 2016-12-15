@@ -14,6 +14,7 @@ var knivesArray = [];
 var paused = true;
 var winPoints = 10;
 var losePoints = -10;
+var levelSpeed = 0.008;
 
 var scene, camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
 		renderer, container;
@@ -430,8 +431,8 @@ function loop() {
 	if (paused == false) {
 		wallStreet.mesh.rotation.z += .005;
 		clouds.mesh.rotation.z += .005;
-		knives.mesh.rotation.z += .002;
-		moneyz.mesh.rotation.z += .002;
+		knives.mesh.rotation.z += levelSpeed;
+		moneyz.mesh.rotation.z += levelSpeed;
 		$(document.body).css("cursor", "none")
 		updateDogPos();
 		checkWin();
@@ -500,20 +501,26 @@ function checkGetMoney() {
 	for (var i = 0; i < m.children.length; i++) {
 		mChild = m.children[i]
 		var position = new THREE.Vector3();
-		moneyX = position.setFromMatrixPosition(mChild.matrixWorld).x;
-		moneyY = position.setFromMatrixPosition(mChild.matrixWorld).y;
 
+		if (mChild.visible == true) {
+			moneyX = position.setFromMatrixPosition(mChild.matrixWorld).x;
+			moneyY = position.setFromMatrixPosition(mChild.matrixWorld).y;
 
-		var mXRange = [moneyX-12, moneyX + 5];
-		var mYRange = [moneyY-5, moneyY + 5];
-		//give a range to the dog
-		var dogXRange = [dog.mesh.position.x - 15, dog.mesh.position.x]
-		var dogYRange = [dog.mesh.position.y - 5, dog.mesh.position.y + 10]
+			var mXRange = [moneyX-12, moneyX + 5];
+			var mYRange = [moneyY-5, moneyY + 5];
+			//give a range to the dog
+			var dogXRange = [dog.mesh.position.x - 15, dog.mesh.position.x]
+			var dogYRange = [dog.mesh.position.y - 5, dog.mesh.position.y + 10]
 
-		if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
+			if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
 			&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
-			m.remove(mChild);
-			addMoney();
+				// m.remove(mChild);
+				//when you remove it,
+				mChild.visible = false;
+				if (mChild.visible == false) {
+					addMoney();
+				}
+			}
 		}
 	}
 }
@@ -526,19 +533,24 @@ function checkGetStabbed() {
 	for (var i = 0; i < k.children.length; i++) {
 		kChild = k.children[i];
 		var position = new THREE.Vector3();
-		knifeX = position.setFromMatrixPosition(kChild.matrixWorld).x;
-		knifeY = position.setFromMatrixPosition(kChild.matrixWorld).y;
 
-		var mXRange = [knifeX-12, knifeX + 5];
-		var mYRange = [knifeY-5, knifeY + 5];
-		//give a range to the dog
-		var dogXRange = [dog.mesh.position.x - 15, dog.mesh.position.x]
-		var dogYRange = [dog.mesh.position.y - 5, dog.mesh.position.y + 10]
+		if (kChild.visible == true) {
+			knifeX = position.setFromMatrixPosition(kChild.matrixWorld).x;
+			knifeY = position.setFromMatrixPosition(kChild.matrixWorld).y;
 
-		if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
+			var mXRange = [knifeX-12, knifeX + 5];
+			var mYRange = [knifeY-5, knifeY + 5];
+			//give a range to the dog
+			var dogXRange = [dog.mesh.position.x - 15, dog.mesh.position.x]
+			var dogYRange = [dog.mesh.position.y - 5, dog.mesh.position.y + 10]
+
+			if (dogXRange[1] >= mXRange[0] && dogXRange[0] <= mXRange[1]
 			&& dogYRange[1] >= mYRange[0] && dogYRange[0] <= mYRange[1]) {
-				k.remove(kChild);
-				deductMoney();
+				kChild.visible = false;
+				if (kChild.visible == false) {
+					deductMoney();
+				}
+			}
 		}
 	}
 }
@@ -556,17 +568,41 @@ function deductMoney() {
 }
 
 function checkWin() {
-	if (points == winPoints) {
-		paused = true;
-		setInterval(winAnimation,50)
-		$('.fa-pause').hide();
-		$('.fa-repeat').show();
-	} else if (points == losePoints) {
-		paused = true;
-		setInterval(loseAnimation,50)
-		$('.fa-pause').hide();
-		$('.fa-repeat').show();
+	m = moneyz.mesh.children
+	remainingMoney = 20;
+	for (var i = 0; i < m.length; i++) {
+		if (m[i].visible == false) {
+			remainingMoney -= 1;
+		}
 	}
+	pointDiff = winPoints - points;
+	if (remainingMoney < pointDiff) {
+		loseActions();
+		$('#outcome').toggle();
+		$('#outcome').text('There is not enough free moneyz left for you to afford a burger. Get stabbed less, loser.')
+	} else if (points == winPoints) {
+		winActions();
+		$('#outcome').toggle();
+		$('#outcome').text('Yay! You can now afford a burger!')
+	} else if (points == losePoints) {
+		loseActions();
+		$('#outcome').toggle();
+		$('#outcome').text('You got stabbed so many times that your credit rating is unacceptable for purchases of burgers.')
+	}
+}
+
+function winActions() {
+	paused = true;
+	setInterval(winAnimation,50)
+	$('.fa-pause').hide();
+	$('.fa-repeat').show();
+}
+
+function loseActions() {
+	paused = true;
+	setInterval(loseAnimation,50)
+	$('.fa-pause').hide();
+	$('.fa-repeat').show();
 }
 
 function winAnimation() {
@@ -633,20 +669,15 @@ $(document).ready(function() {
 });
 
 function clearGame() {
+	$('#outcome').toggle();
 	d = dog.mesh;
-	k = knives.mesh;
-	m = moneyz.mesh;
+	scene.remove(d)
 	for (var i = 0; i < 999; i++) {
 		window.clearInterval(i)
 	}
-
-	scene.remove(d)
-	scene.remove(k)
-	scene.remove(m)
-	// stopAnimation();
 }
 
-function stopAnimation() {
+function resizeDog() {
 	dog.mesh.rotation.x = 0;
 	dog.mesh.rotation.y = 0;
 	dog.mesh.scale.x = 0;
@@ -658,7 +689,13 @@ function stopAnimation() {
 function newGame() {
 	paused = false;
 	points = 0;
-	buildMoneyz(); //this is child 4
-	buildKnives(); //this is child 5
+	k = knives.mesh.children;
+	m = moneyz.mesh.children;
+	for (var i = 0; i < k.length; i ++) {
+		k[i].visible = true;
+	}
+	for (var i = 0; i < m.length; i ++) {
+		m[i].visible = true;
+	}
 	buildDog();
 }
