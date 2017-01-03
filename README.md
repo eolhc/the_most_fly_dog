@@ -16,7 +16,7 @@ Using three.js was a continual learning process. In particular, I had to think n
 
 ## Where This Could Go
 
-I wish to add a 3D burger, more obstacles, more surprises and faster speeds and goals with additional gameplay levels.
+I wish to add a 3D burger, touchscreen integration, more obstacles, more surprises and faster speeds and goals with additional gameplay levels.
 
 ## Built With...
 
