@@ -4,7 +4,7 @@
 
 ## Who is The Most Fly Dog?
 
-The Most Fly Dog is a flying dog named Dogg, who wishes to buy a burger. Buying a burger requires human money. Your goal is to guide Dogg over Wall Street is his quest to collect money without getting stabbed and robbed! Get $10, get a BURGER!
+The Most Fly Dog is a 3D flying dog named Dogg, who wishes to buy a burger. Buying a burger requires human money. Your goal is to guide Dogg over Wall Street is his quest to collect money without getting stabbed and robbed! Get $10, get a BURGER!
 
 ## Why 
 
