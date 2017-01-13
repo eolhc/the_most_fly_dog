@@ -140,3 +140,7 @@ p {
   color: #ED6A5A;
   cursor: pointer;
 }
+
+audio {
+  display: none;
+}

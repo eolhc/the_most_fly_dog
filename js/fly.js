@@ -20,6 +20,7 @@ var scene, camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
 		renderer, container;
 
 function buildScene() {
+
   HEIGHT = window.innerHeight;
   WIDTH = window.innerWidth;
 
@@ -638,6 +639,8 @@ function start() {
 window.addEventListener('load', start, false);
 
 $(document).ready(function() {
+	$('#bg-beats').get(0).play();
+
 	$('#letsplay').on("mousedown", function() {
 		paused = false;
 		$('#play').hide();
@@ -660,7 +663,6 @@ $(document).ready(function() {
 	})
 
 	$('.fa-repeat').on("mousedown", function() {
-		console.log('sup');
 		points = 0;
 		$('#amount').text(points)
 		clearGame();
