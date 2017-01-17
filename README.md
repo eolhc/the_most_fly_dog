@@ -6,9 +6,9 @@
 
 The Most Fly Dog is a 3D flying dog named Dogg, who wishes to buy a burger. Buying a burger requires human money. Your goal is to guide Dogg over Wall Street is his quest to collect money without getting stabbed and robbed! Get $10, get a BURGER!
 
-## Why 
+## Why
 
-We were given free reign to create anything for our final project at General Assembly. I want to create lots of things but, eventually, settled on my most recent interest, three.js. 
+We were given free reign to create anything for our final project at General Assembly. I want to create lots of things but, eventually, settled on my most recent interest, three.js.
 
 ## What I Learned
 
@@ -17,6 +17,10 @@ Using three.js was a continual learning process. In particular, I had to think n
 ## Where This Could Go
 
 I wish to add a 3D burger, touchscreen integration, more obstacles, more surprises and faster speeds and goals with additional gameplay levels.
+
+* 17/01 Touchscreen functionality now supported
+* 15/01 More obstacles available on chloephua.com
+* I am still working towards greater things to make him more fly
 
 ## Built With...
 
