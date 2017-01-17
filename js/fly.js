@@ -731,7 +731,7 @@ function touchMove(e) {
 		getTouchPos(e);
 
 		// Prevent a scrolling action as a result of this touchmove triggering.
-		// event.preventDefault();
+		event.preventDefault();
 }
 
 // Get the touch position relative to the top-left of the canvas
