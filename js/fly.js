@@ -467,9 +467,9 @@ function handleMouseMove(event) {
 	mousePos = {x:tx, y:ty};
 };
 
-function handleTouchMove(x,y) {
-	var tx = x;
-	var ty = y;
+function handleTouchMove(touchX,touchY) {
+	var tx = touchX;
+	var ty = touchY;
 	mousePos = {x:tx, y:ty};
 };
 
@@ -638,29 +638,20 @@ function start() {
 	buildKnives(); //this is child 5
 	buildDog();
 
+	setTimeout(handleEvents,2000)
 
-	$(document).on("mousemove",handleMouseMove)
-
-	$(document.body).bind('touchmove',function(e){
-      e.preventDefault();
-      var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-      var elm = $(this).offset();
-      var x = touch.pageX - elm.left;
-      var y = touch.pageY - elm.top;
-      if(x < $(this).width() && x > 0){
-          if(y < $(this).height() && y > 0){
-                  //CODE GOES HERE
-            handleTouchMove(x,y)
-          }
-      }
-	});
-
+	function handleEvents() {
+		$(document).on("mousemove",handleMouseMove)
+		$(document).on('touchstart', touchStart);
+		$(document).on('touchmove', touchMove);
+	}
 	setTimeout(function(){loop()},2000);
 }
 
 window.addEventListener('load', start, false);
 
 $(document).ready(function() {
+
 	$('#bg-beats').get(0).play();
 
 	$('#letsplay').on("mousedown", function() {
@@ -724,4 +715,39 @@ function newGame() {
 		m[i].visible = true;
 	}
 	buildDog();
+}
+
+
+//touch stuff
+
+// Define some variables to keep track of the touch position
+var touchX,touchY;
+
+function touchStart() {
+		getTouchPos();
+}
+
+function touchMove(e) {
+		getTouchPos(e);
+
+		// Prevent a scrolling action as a result of this touchmove triggering.
+		// event.preventDefault();
+}
+
+// Get the touch position relative to the top-left of the canvas
+// When we get the raw values of pageX and pageY below, they take into account the scrolling on the page
+// but not the position relative to our target div. We'll adjust them using "target.offsetLeft" and
+// "target.offsetTop" to get the correct values in relation to the top left of the canvas.
+function getTouchPos(e) {
+		if (!e)
+				var e = event;
+
+		if (e.touches) {
+				if (e.touches.length == 1) { // Only deal with one finger
+						var touch = e.touches[0]; // Get the information for finger #1
+						touchX = -1 + (touch.pageX / WIDTH)*2;
+						touchY = 1 - (touch.pageY / HEIGHT)*2;
+						handleTouchMove(touchX,touchY)
+				}
+		}
 }
