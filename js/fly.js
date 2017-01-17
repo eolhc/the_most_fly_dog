@@ -652,7 +652,7 @@ window.addEventListener('load', start, false);
 
 $(document).ready(function() {
 
-	$('#bg-beats').get(0).play();
+	// $('#bg-beats').get(0).play();
 
 	$('#letsplay').on("mousedown", function() {
 		paused = false;
