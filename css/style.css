@@ -151,12 +151,17 @@ audio {
 
 
 @media screen and (max-width: 375px) {
+
   h1 {
     font-size: 1.5em;
   }
 
   header {
     padding: 1em;
+  }
+
+  p {
+    font-size: 0.5em;
   }
 
   .fa {
