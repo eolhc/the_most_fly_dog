@@ -469,14 +469,14 @@ function handleMouseMove(event) {
 
 function updateDogPos() {
 
-	// let's move the airplane between -100 and 100 on the horizontal axis,
+	// let's move the dog between -100 and 100 on the horizontal axis,
 	// and between 25 and 175 on the vertical axis,
 	// depending on the mouse position which ranges between -1 and 1 on both axes;
 	// to achieve that we use a normalize function (see below)
 	var targetX = normalize(mousePos.x, -.75, .75, -100, 100);
 	var targetY = normalize(mousePos.y, -.75, .75, 25, 175);
 	dog.mesh.position.y += (targetY-dog.mesh.position.y)*0.1;
-	// update the airplane's position
+	// update the dog's position
 	dog.mesh.position.y = targetY;
 	dog.mesh.position.x = targetX;
 	dog.tail.rotation.x += 0.3;
@@ -632,6 +632,16 @@ function start() {
 	buildKnives(); //this is child 5
 	buildDog();
 
+
+	$(document).on({
+    'touchstart': function (e) {
+        $(this).on('touchmove', handleMouseMove);
+    },
+    'touchend': function (e) {
+        $(this).off('touchmove');
+    }
+	});
+
 	$(document).on("mousemove",handleMouseMove)
 	setTimeout(function(){loop()},2000);
 }
@@ -666,6 +676,8 @@ $(document).ready(function() {
 		points = 0;
 		$('#amount').text(points)
 		clearGame();
+		$('.fa-repeat').hide();
+		$('.fa-pause').show();
 		newGame();
 	})
 });

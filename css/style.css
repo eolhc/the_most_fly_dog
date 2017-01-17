@@ -45,12 +45,15 @@ header {
 }
 
 #info, #menu {
-  display: inline-block;
   position: fixed;
   top: 0;
   right: 0;
   padding: 1em;
   margin: 1em;
+}
+
+#menu {
+  display: inline-block;
 }
 
 #controls {
@@ -61,6 +64,7 @@ header {
   width: 25%;
   background-color: rgba(241, 255, 250, 0.85);
   border-radius: 20px;
+  display: block;
 }
 
 #info .fa-window-close {
@@ -143,4 +147,68 @@ p {
 
 audio {
   display: none;
+}
+
+
+@media screen and (max-width: 375px) {
+  h1 {
+    font-size: 1.5em;
+  }
+
+  header {
+    padding: 1em;
+  }
+
+  .fa {
+    width: 20px;
+  }
+
+  #play {
+    position: fixed;
+    top: 20%;
+    width: 80%;
+    margin: 0 auto;
+    left: 5%;
+  }
+
+  .fa-4x {
+    font-size: 2em!important;
+  }
+}
+
+
+@media screen and (max-width: 750px) {
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  header {
+    padding: 1em;
+  }
+
+  p {
+    font-size: 0.7em;
+  }
+
+  .fa {
+    width: 20px;
+  }
+
+  #play {
+    position: fixed;
+    top: 30%;
+    width: 85%;
+    margin: 0 auto;
+    left: 5%;
+    padding: 0.5em;
+  }
+
+  .fa-4x {
+    font-size: 2em!important;
+  }
+
+  #letsplay {
+    padding: 0.2em 1em;
+  }
 }
