@@ -734,10 +734,6 @@ function touchMove(e) {
 		event.preventDefault();
 }
 
-// Get the touch position relative to the top-left of the canvas
-// When we get the raw values of pageX and pageY below, they take into account the scrolling on the page
-// but not the position relative to our target div. We'll adjust them using "target.offsetLeft" and
-// "target.offsetTop" to get the correct values in relation to the top left of the canvas.
 function getTouchPos(e) {
 		if (!e)
 				var e = event;
