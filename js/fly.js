@@ -467,6 +467,12 @@ function handleMouseMove(event) {
 	mousePos = {x:tx, y:ty};
 };
 
+function handleTouchMove(x,y) {
+	var tx = x;
+	var ty = y;
+	mousePos = {x:tx, y:ty};
+};
+
 function updateDogPos() {
 
 	// let's move the dog between -100 and 100 on the horizontal axis,
@@ -633,16 +639,22 @@ function start() {
 	buildDog();
 
 
-	$(document).on({
-    'touchstart': function (e) {
-        $(this).on('touchmove', handleMouseMove);
-    },
-    'touchend': function (e) {
-        $(this).off('touchmove');
-    }
+	$(document).on("mousemove",handleMouseMove)
+
+	$(document.body).bind('touchmove',function(e){
+      e.preventDefault();
+      var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+      var elm = $(this).offset();
+      var x = touch.pageX - elm.left;
+      var y = touch.pageY - elm.top;
+      if(x < $(this).width() && x > 0){
+          if(y < $(this).height() && y > 0){
+                  //CODE GOES HERE
+            handleTouchMove(x,y)
+          }
+      }
 	});
 
-	$(document).on("mousemove",handleMouseMove)
 	setTimeout(function(){loop()},2000);
 }
 
